@@ -1,5 +1,13 @@
 package com.company;
 
+import javax.crypto.Cipher;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.Key;
+import java.security.PrivateKey;
+import java.util.LinkedList;
+import java.util.List;
+
 public class HandlerSupporter {
 
 
@@ -9,6 +17,28 @@ public class HandlerSupporter {
                 return '#';
             case 38:
                 return '&';
+            case 46:
+                return '.';
+            case 48:
+                return '0';
+            case 49:
+                return '1';
+            case 50:
+                return '2';
+            case 51:
+                return '3';
+            case 52:
+                return '4';
+            case 53:
+                return '5';
+            case 54:
+                return '6';
+            case 55:
+                return '7';
+            case 56:
+                return '8';
+            case 57:
+                return '9';
             case 58:
                 return ':';
             case 64:
@@ -121,6 +151,115 @@ public class HandlerSupporter {
                 return ' ';
 
         }
+    }
+
+    public static String decryptStream(InputStream stream, PrivateKey key){
+        try {
+            List<Byte> bytereader = new LinkedList<>();
+            int letter = stream.read();
+            while(letter != -1){
+                Byte bite = (byte)letter;
+                //System.out.println(bite + "p");
+                bytereader.add(bite);
+                letter = stream.read();
+            }
+
+            byte[] bytes = new byte[bytereader.size()];
+            for(int i = 0; i < bytes.length; i++){
+                bytes[i] = bytereader.get(i);
+            }
+
+            byte[] out = cipherTrans(false, key, bytes);
+
+
+            String message = "";
+            for (int i = 0; i < out.length; i++) {
+                message += HandlerSupporter.intToChar(out[i]);
+            }
+
+            return message;
+        } catch (Exception e){
+            return null;
+        }
+    }
+
+    public static byte[] cipherTrans(boolean encrypt, Key key, byte[] bytes) throws Exception{
+
+
+        int insize;
+        int outsize;
+        int mode;
+
+        if(encrypt) {
+
+            insize = 245;
+            outsize = 256;
+            mode = Cipher.ENCRYPT_MODE;
+        } else {
+            insize = 256;
+            outsize = 245;
+            mode = Cipher.DECRYPT_MODE;
+        }
+
+
+            //byte[] out = new byte[bytes.length];
+
+            /*int fullblocks = bytes.length / 245;
+            int totalblocks;
+            if(bytes.length % 245 == 0){
+                totalblocks = fullblocks;
+            } else {
+                totalblocks = fullblocks + 1;
+            }
+
+            byte[] out = new byte[totalblocks * 256];
+
+
+
+
+             */
+
+            //split into blocks
+            int blocks = bytes.length / insize;
+            byte[] out = new byte[blocks * outsize];
+            for (int i = 0; i < blocks; i++) {
+                byte[] block = new byte[insize];
+                for (int j = 0; j < insize; j++) {
+
+                    block[j] = bytes[i * insize + j];
+
+                }
+
+                Cipher cipher = Cipher.getInstance("RSA");
+                cipher.init(mode, key);
+                //System.out.println("OHHHH");
+                byte[] o = cipher.doFinal(block);
+                //System.out.println(o.length + "b");
+
+                for (int j = 0; j < outsize; j++) {
+
+                    out[i * outsize + j] = o[j];
+
+                }
+            }
+
+            //encrypt tail
+            /*int end = blocks * 245;
+            byte[] tail = new byte[bytes.length - end];
+            for (int i = end; i < bytes.length; i++) {
+                tail[i - end] = bytes[i];
+            }
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            //System.out.println("OHHHH");
+            byte[] o = cipher.doFinal(tail);
+            System.out.println(o.length + "b");
+            for (int i = end; i < bytes.length; i++) {
+                out[i] = o[i - end];
+            }*/
+
+            return out;
+
     }
 
 

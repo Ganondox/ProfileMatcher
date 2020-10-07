@@ -53,6 +53,7 @@ public class FileManager implements Map<String, UserRecord> {
             if (records[i].getName().equals(key)) {
                 //read file
                 try {
+                    System.out.println(records[i].getName());
                     FileReader fileReader = new FileReader(records[i]);
                     String contents = "";
                     int letter = fileReader.read();

@@ -38,6 +38,7 @@ public class Server {
             HttpServer server = HttpServer.create(new InetSocketAddress("localhost", 8001), 0);
             server.createContext("/Home", new HomeHandler());
             server.createContext("/Register", new RegisterHandler());
+            server.createContext("/Login", new LoginHandler());
             server.start();
         } catch (Exception e){
 
