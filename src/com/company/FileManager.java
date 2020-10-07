@@ -171,7 +171,7 @@ public class FileManager implements Map<String, UserRecord> {
         for(int j = 0; j < ahalf.length; j++){
             aptitude[j] = Double.parseDouble(ahalf[j]);
         }
-        return new UserRecord(fields[0], fields[1], fields[2], fields[3].equals("Y"), new ProfileVector(interests, aptitude));
+        return new UserRecord(fields[0], fields[1], fields[2], fields[3].equals("Y"), new ProfileVector(interests, aptitude), fields[5].equals("Y"));
 
     }
 
@@ -195,6 +195,8 @@ public class FileManager implements Map<String, UserRecord> {
                 contents += "@";
             }
         }
+        contents += "#";
+        if(value.isCompleted) contents += 'Y'; else contents += "N";
         return contents;
     }
 }

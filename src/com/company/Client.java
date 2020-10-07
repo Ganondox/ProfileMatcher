@@ -23,7 +23,9 @@ public class Client {
 
 
 
-        String requestBody = "username: " + args[0] + " password: " + args[1];
+        //String requestBody = "username: " + args[0] + " password: " + args[1];
+
+        String requestBody = args[0] + "#" + args[1];
 
 
         //ObjectMapper objectMapper = new ObjectMapper();
