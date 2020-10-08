@@ -13,10 +13,18 @@ public class HandlerSupporter {
 
     public static char intToChar(int integer){
         switch (integer){
+            case 10:
+                return '\n';
+            case 33:
+                return '!';
+            case 39:
+                return '\'';
             case 35:
                 return '#';
             case 38:
                 return '&';
+            case 45:
+                return '-';
             case 46:
                 return '.';
             case 48:

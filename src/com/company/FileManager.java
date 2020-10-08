@@ -61,6 +61,7 @@ public class FileManager implements Map<String, UserRecord> {
                         contents += HandlerSupporter.intToChar(letter);
                         letter = fileReader.read();
                     }
+                    fileReader.close();
                     //convert to user record
                     return stringToRecord(contents);
 
@@ -102,7 +103,10 @@ public class FileManager implements Map<String, UserRecord> {
         File[] records = recordsFolder.listFiles();
         for(int i = 0; i < records.length; i++){
             if (records[i].getName().equals(key)) {
-                records[i].delete();
+                if(!records[i].delete()){
+                    System.out.println("Delete Failed");
+                    System.out.println(records[i].getPath());
+                }
             }
         }
         return old;

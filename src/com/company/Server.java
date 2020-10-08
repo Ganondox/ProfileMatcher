@@ -19,6 +19,10 @@ public class Server {
     public PublicKey pub;
     public Map<String, UserRecord> users;
 
+    final static int APT_N = 100;
+    final static int INT_M = 100;
+    final static int NUM = 3;
+
     public static void main(String[] args){
 
         server = new Server();
@@ -39,6 +43,9 @@ public class Server {
             server.createContext("/Home", new HomeHandler());
             server.createContext("/Register", new RegisterHandler());
             server.createContext("/Login", new LoginHandler());
+            server.createContext("/Delete", new DeleteHandler());
+            server.createContext("/Update", new UpdateHandler());
+            server.createContext("/Match", new MatchHandler());
             server.start();
         } catch (Exception e){
 

@@ -41,6 +41,8 @@ public class MatchFinder {
 
     public static int findMatch(ProfileVector target, List<ProfileVector> employers, List<ProfileVector> users, int apt_n, int int_m){
 
+        if(employers.size() == 1) return employers.get(0).getId();
+
         //filter profiles
         EmployerFilter ef = new EmployerFilter(apt_n, int_m);
         List<ProfileVector> filterEmployers = ef.filter(employers, target);
@@ -59,6 +61,10 @@ public class MatchFinder {
     }
 
     public static int[] getRanking(ProfileVector target, List<ProfileVector> employers, List<ProfileVector> users, int apt_n, int int_m, int num){
+
+        if( num > employers.size()){
+            num = employers.size();
+        }
 
         int[] ranking = new int[num];
 

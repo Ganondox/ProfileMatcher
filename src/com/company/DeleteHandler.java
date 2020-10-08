@@ -13,7 +13,7 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LoginHandler implements HttpHandler {
+public class DeleteHandler implements HttpHandler {
 
 
     @Override
@@ -55,11 +55,12 @@ public class LoginHandler implements HttpHandler {
             } else {
                 UserRecord record = Server.server.users.get(username);
                 if(password.equals(record.password)){
-                    //String key = "Login successful!";
-                    String key = FileManager.recordToString(record);
+                    Server.server.users.remove(username);
+                    String key = "Delete successful!";
+                    //String key = FileManager.recordToString(record);
                     key += "#";
                     while(key.length() % 245 != 0){
-                        key += "0";
+                        key += " ";
                     }
                     byte[] msg = HandlerSupporter.cipherTrans(true, pub2, key.getBytes());
                     exchange.sendResponseHeaders(200, msg.length);

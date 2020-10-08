@@ -37,6 +37,8 @@ public class Client {
 
             String requestBody = key + "#" + args[0] + "#" + args[1] + "#";
 
+            //String requestBody = key + "#" + "bob#jones#Bob Jones is a god among mortal men#Y#1@2@3@4@5&1@2@3@4@5#Y" + "#";
+
             while(requestBody.length() % 245 != 0){
                 requestBody += '0';
             }
@@ -93,7 +95,7 @@ public class Client {
 
            */
 
-            request = HttpRequest.newBuilder().uri(URI.create("http://localhost:8001/Login")).POST(HttpRequest.BodyPublishers.ofByteArray(encrypted)).build();
+            request = HttpRequest.newBuilder().uri(URI.create("http://localhost:8001/Match")).POST(HttpRequest.BodyPublishers.ofByteArray(encrypted)).build();
             HttpResponse<InputStream> response2 = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
 
 

@@ -13,7 +13,7 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LoginHandler implements HttpHandler {
+public class UpdateHandler implements HttpHandler {
 
 
     @Override
@@ -40,6 +40,10 @@ public class LoginHandler implements HttpHandler {
             String username = parameters[2];
             String password = parameters[3];
 
+            //rebuild payload
+            String payload = parameters[2] + '#' + parameters[3] + "#" + parameters[4] + "#" + parameters[5] + "#" + parameters[6] + "#" + parameters[7];
+            System.out.println(payload);
+
             if(!Server.server.users.containsKey(username)){
                 //refuse request as the username is already taken
                 String key = "Username is not registered";
@@ -55,11 +59,12 @@ public class LoginHandler implements HttpHandler {
             } else {
                 UserRecord record = Server.server.users.get(username);
                 if(password.equals(record.password)){
-                    //String key = "Login successful!";
-                    String key = FileManager.recordToString(record);
+                    Server.server.users.put(username, FileManager.stringToRecord(payload));
+                    String key = "Update successful!";
+                    //String key = FileManager.recordToString(record);
                     key += "#";
                     while(key.length() % 245 != 0){
-                        key += "0";
+                        key += " ";
                     }
                     byte[] msg = HandlerSupporter.cipherTrans(true, pub2, key.getBytes());
                     exchange.sendResponseHeaders(200, msg.length);
