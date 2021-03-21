@@ -5,6 +5,10 @@ import java.util.List;
 public class Matcher {
 
     public static int[] match(List<ProfileVector> users, List<ProfileVector> employers){
+        //assert users.size() == employers.size();
+        //System.out.println(users.size() + "==" + employers.size());
+        //System.out.println(users.size() == employers.size());
+        if(users.size() != employers.size()) throw new RuntimeException();
         double[][] intDiv = new double[users.size()][employers.size()];
         for(int i = 0; i < users.size(); i++){
             for(int j = 0; j < employers.size(); j++){
@@ -53,10 +57,12 @@ public class Matcher {
 
 
         //Gale-Shapely Loop
+        assert (users.size() == employers.size());
         boolean unfinished = true;
         while(unfinished){
 
             for(int i = 0; i < users.size(); i++){
+                assert (users.size() == employers.size());
                 //proposes to highest ranked that they haven't proposed to yet
                 int target = intRank[i][matchIndices[i]];
                 if(tenativeMatch[target] == -1 || tenativeMatch[target] == i){

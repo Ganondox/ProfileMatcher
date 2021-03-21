@@ -92,7 +92,7 @@ public class MatchFinder {
                 }
             }
             for(int j = 0; j < target2.interests.length; j++){
-                target2.interests[j] -= ref[j] * K;
+                target2.interests[j] -= ( target2.interests[j] - ref[j]) * K;
             }
 
 
@@ -100,4 +100,61 @@ public class MatchFinder {
 
         return ranking;
     }
+
+    public static int[] getInterestRanking(ProfileVector target,  List<ProfileVector> employers, int num){
+        EmployerFilter filter = new EmployerFilter(0,num);
+        List<ProfileVector> filtered = filter.filter(employers, target);
+        int[] ranking = new int[filtered.size()];
+        for(int i = 0; i < ranking.length; i++){
+            ranking[i] = filtered.get(i).getId();
+        }
+        return ranking;
+    }
+
+    public static int[] getAptitudeRanking(ProfileVector target,  List<ProfileVector> employers, int num){
+        EmployerFilter filter = new EmployerFilter(num, 0);
+        List<ProfileVector> filtered = filter.filter(employers, target);
+        int[] ranking = new int[filtered.size()];
+        for(int i = 0; i < ranking.length; i++){
+            ranking[i] = filtered.get(i).getId();
+        }
+        return ranking;
+    }
+
+    public static int[] getMixedRanking(ProfileVector target,  List<ProfileVector> employers, int num){
+        if( num > employers.size()){
+            num = employers.size();
+        }
+
+        int[] ranking = new int[num];
+        double[] divergences = new double[num];
+        for (int i = 0; i < divergences.length; i++) {
+            divergences[i] = Double.MAX_VALUE;
+        }
+        for (int i = 0; i < employers.size(); i++) {
+            double divergence = target.aptDivergence(employers.get(i)) + target.intDivergence(employers.get(i)) ;
+            if (divergence < divergences[num - 1]) {
+                //in top, put in place
+                ranking[num - 1] = employers.get(i).getId();
+                divergences[num - 1] = divergence;
+                for (int j = num - 1; j > 0; j--) {
+                    if (divergence < divergences[j - 1]) {
+                        divergences[j] = divergences[j - 1];
+                        ranking[j] = ranking[j - 1];
+                        divergences[j - 1] = divergence;
+                        ranking[j - 1] = employers.get(i).getId();
+                    } else break;
+                }
+
+            }
+        }
+        return ranking;
+    }
+
+
+
+
+
+
+
 }
