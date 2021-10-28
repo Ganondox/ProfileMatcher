@@ -2,8 +2,8 @@ package com.company;
 
 public class ProfileVector {
 
-    final static int I_DIM = 5;
-    final static int A_DIM = 5;
+    final static int I_DIM = 14;
+    final static int A_DIM = 69;
 
     double[] interests;
     double[] aptitude;
